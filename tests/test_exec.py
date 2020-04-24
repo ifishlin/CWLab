@@ -22,5 +22,5 @@ run_data = {
 def test_create_job_from_param_values(test_app):
      test_app.post('/create_job_from_param_values/', data=json.dumps(job_data), content_type='application/json')
 
-def test_start_exec(test_app):
+def test_start_exec(test_app, start_wes):
      test_app.post('/start_exec/', data=json.dumps(run_data), content_type='application/json')

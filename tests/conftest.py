@@ -1,10 +1,11 @@
 import pytest
+import threading
 from cwlab import create_app
 import tempfile
 import os
 from datetime import datetime
 from cwlab import db_connector
-
+from xprocess import ProcessStarter
 
 @pytest.fixture(scope='session')
 def test_app():
@@ -18,6 +19,15 @@ def test_app():
 @pytest.fixture(scope='session')
 def test_connector(test_app):
     yield db_connector
+    #db_connector.clean_db()
+
+
+@pytest.fixture(scope='session')
+def start_wes(xprocess):
+    class Starter(ProcessStarter):
+        pattern = " Running on "
+        args = ["wes-server"]
+    logfile = xprocess.ensure("start_wes", Starter)
     #db_connector.clean_db()
 
 @pytest.fixture(scope='module')
