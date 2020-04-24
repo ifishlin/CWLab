@@ -11,27 +11,7 @@ EXEC_DIR: '/c/cwlab/exec/'
 DB_DIR: '/c/cwlab/database/'
 
 EXEC_PROFILES:
-    cwltool_local:
-        shell: bash
-        max_retries: 2
-        timeout:
-            pre_exec: 120
-            exec: 86400
-            eval: 120
-            post_exec: 120
-        exec: | 
-            echo "${OUTPUT_DIR}"; cwltool \
-                --tmpdir-prefix /c/cwlab/tmp \
-                --tmp-outdir-prefix /c/cwlab/tmp \
-                --cidfile-prefix /c/cwlab/tmp \
-                --outdir "${OUTPUT_DIR}" "${WORKFLOW}" "${RUN_INPUT}" \
-                >> "${LOG_FILE}" 2>&1
-        eval: | 
-            LAST_LINE=$(tail -n 1 ${LOG_FILE})
-            if [[ "${LAST_LINE}" == *"Final process status is success"* ]]
-            then
-                SUCCESS=True
-            else
-                SUCCESS=False
-                ERR_MESSAGE="cwltool failed - ${LAST_LINE}"
-            fi
+    WES: 
+        type: python
+        py_module: ./wes_exec_profile.py
+        py_class: WES
